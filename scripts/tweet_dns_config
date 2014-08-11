@@ -9,34 +9,28 @@ def cli():
     pass
 
 @click.command()
-@click.argument('key')
-def get(key):
+@click.argument('keys', nargs=-1)
+def get(keys):
     config.load()
     try:
-        print config.get(str(key))
+        print config.get(*keys)
     except KeyError, e:
-        print "Error: '%s' is not set." % key
+        print "Error: '%s' is not set." % keys
 
 @click.command()
-@click.argument('key')
-@click.argument('value')
-def set(key, value):
+@click.argument('keys', nargs=-1, required=True)
+@click.argument('value', nargs=1, required=True)
+def set(keys, value):
     config.load()
-    print "setting '%s' to '%s'" % (str(key), str(value))
-    config.set(str(key), str(value))
+    print "setting '%s' to '%s'" % (str(keys), str(value))
+    config.set(*(keys + (value,)))
     config.save()
     print "done."
 
 @click.command()
 def show():
     config.load()
-    num_keys = len(config.keys())
-    print "Clacks Config (%s keys):" % num_keys
-    if num_keys == 0:
-        print "  <empty>"
-    else:
-        for k,v in config.iteritems():
-            print "  '%s' = '%s'" % (k,v)
+    print config._tree
 
 @click.command()
 @click.confirmation_option(help='Are you sure you want to clear the Clacks settings file?')
