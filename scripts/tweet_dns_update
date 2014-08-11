@@ -1,1 +1,17 @@
 #!/usr/bin/env python
+
+from tweet_dns.configuration import config
+
+def main():
+    check_config()
+
+def check_config():
+    config.get('twitter', 'auth', 'consumer_key')
+    config.get('twitter', 'auth', 'consumer_secret')
+    config.get('twitter', 'auth', 'access_token_key')
+    config.get('twitter', 'auth', 'access_token_secret')
+
+    config.get('security', 'mode') in ['none', 'secure_read', 'secure_write', 'secure_both']
+
+if __name__ == '__main__':
+    main()
