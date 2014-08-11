@@ -1,1 +1,56 @@
 #!/usr/bin/env python
+
+import click
+
+from tweet_dns.configuration import config
+
+@click.group()
+def cli():
+    pass
+
+@click.command()
+@click.argument('key')
+def get(key):
+    config.load()
+    try:
+        print config.get(str(key))
+    except KeyError, e:
+        print "Error: '%s' is not set." % key
+
+@click.command()
+@click.argument('key')
+@click.argument('value')
+def set(key, value):
+    config.load()
+    print "setting '%s' to '%s'" % (str(key), str(value))
+    config.set(str(key), str(value))
+    config.save()
+    print "done."
+
+@click.command()
+def show():
+    config.load()
+    num_keys = len(config.keys())
+    print "Clacks Config (%s keys):" % num_keys
+    if num_keys == 0:
+        print "  <empty>"
+    else:
+        for k,v in config.iteritems():
+            print "  '%s' = '%s'" % (k,v)
+
+@click.command()
+@click.confirmation_option(help='Are you sure you want to clear the Clacks settings file?')
+def clear():
+    print "clearing Clacks Config.."
+    config.load()
+    config._tree = {}
+    config.save()
+    print "cleared."
+
+if __name__ == '__main__':
+    cli.add_command(get)
+    cli.add_command(set)
+    cli.add_command(show)
+    cli.add_command(clear)
+
+    cli()

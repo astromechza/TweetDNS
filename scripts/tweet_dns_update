@@ -1,20 +1,37 @@
 #!/usr/bin/env python
 
+from twitter import *
+
 from tweet_dns.configuration import config
 from tweet_dns.sources.icanhazip_source import ICanHazIPSource
 
 def main():
-    # skip for nowcheck_config()
+    check_config()
+
     print list(ICanHazIPSource().get())[0]
 
+    twit = make_twitter_connection()
+
+    twit.statuses.update(status="hello world from #tweet_dns")
 
 def check_config():
     config.get('twitter', 'auth', 'consumer_key')
     config.get('twitter', 'auth', 'consumer_secret')
-    config.get('twitter', 'auth', 'access_token_key')
-    config.get('twitter', 'auth', 'access_token_secret')
+    config.get('twitter', 'auth', 'oauth_token_key')
+    config.get('twitter', 'auth', 'oauth_token_secret')
 
     config.get('security', 'mode') in ['none', 'secure_read', 'secure_write', 'secure_both']
+
+def make_twitter_connection():
+    consumer_key = config.get('twitter', 'auth', 'consumer_key')
+    consumer_secret = config.get('twitter', 'auth', 'consumer_secret')
+    oauth_token_key = config.get('twitter', 'auth', 'oauth_token_key')
+    oauth_token_secret = config.get('twitter', 'auth', 'oauth_token_secret')
+
+    return Twitter(auth=OAuth(
+        oauth_token_key, oauth_token_secret,
+        consumer_key, consumer_secret
+    ))
 
 if __name__ == '__main__':
     main()
