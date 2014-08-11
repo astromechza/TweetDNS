@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
 from tweet_dns.configuration import config
+from tweet_dns.sources.icanhazip_source import ICanHazIPSource
 
 def main():
-    check_config()
+    # skip for nowcheck_config()
+    print list(ICanHazIPSource().get())[0]
+
 
 def check_config():
     config.get('twitter', 'auth', 'consumer_key')
