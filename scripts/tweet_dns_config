@@ -11,7 +11,6 @@ def cli():
 @click.command()
 @click.argument('keys', nargs=-1)
 def get(keys):
-    config.load()
     try:
         print config.get(*keys)
     except KeyError, e:
@@ -21,7 +20,6 @@ def get(keys):
 @click.argument('keys', nargs=-1, required=True)
 @click.argument('value', nargs=1, required=True)
 def set(keys, value):
-    config.load()
     print "setting '%s' to '%s'" % (str(keys), str(value))
     config.set(*(keys + (value,)))
     config.save()
@@ -29,14 +27,12 @@ def set(keys, value):
 
 @click.command()
 def show():
-    config.load()
     print config._tree
 
 @click.command()
 @click.confirmation_option(help='Are you sure you want to clear the Clacks settings file?')
 def clear():
     print "clearing Clacks Config.."
-    config.load()
     config._tree = {}
     config.save()
     print "cleared."

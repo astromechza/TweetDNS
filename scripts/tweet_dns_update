@@ -17,16 +17,16 @@ def main():
 def check_config():
     config.get('twitter', 'auth', 'consumer_key')
     config.get('twitter', 'auth', 'consumer_secret')
-    config.get('twitter', 'auth', 'oauth_token_key')
-    config.get('twitter', 'auth', 'oauth_token_secret')
+    config.get('twitter', 'auth', 'access_token_key')
+    config.get('twitter', 'auth', 'access_token_secret')
 
     config.get('security', 'mode') in ['none', 'secure_read', 'secure_write', 'secure_both']
 
 def make_twitter_connection():
     consumer_key = config.get('twitter', 'auth', 'consumer_key')
     consumer_secret = config.get('twitter', 'auth', 'consumer_secret')
-    oauth_token_key = config.get('twitter', 'auth', 'oauth_token_key')
-    oauth_token_secret = config.get('twitter', 'auth', 'oauth_token_secret')
+    oauth_token_key = config.get('twitter', 'auth', 'access_token_key')
+    oauth_token_secret = config.get('twitter', 'auth', 'access_token_secret')
 
     return Twitter(auth=OAuth(
         oauth_token_key, oauth_token_secret,

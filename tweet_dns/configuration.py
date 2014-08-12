@@ -79,4 +79,4 @@ class Config(object):
                 raise ConfigKeyError("Key does not exist! %s" % (".".join(str_keys)))
         return current_level[str_keys[-1]]
 
-config = Config()
+config = Config(auto_load=True)
